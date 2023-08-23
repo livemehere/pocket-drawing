@@ -29,7 +29,7 @@ export const BrushControls: FC<Props> = ({
     <>
       <div
         className={
-          "-rotate-90 flex gap-1 fixed left-[40px] top-[700px] shadow-md origin-left justify-center items-center shadow-black/50 bg-[#121212]"
+          "-rotate-90 flex gap-1 fixed left-[40px] top-[600px] shadow-md origin-left justify-center items-center shadow-black/50 bg-[#121212]"
         }
       >
         <InputRange
@@ -52,7 +52,7 @@ export const BrushControls: FC<Props> = ({
         />
       </div>
       {showHelp && (
-        <div className={"fixed top-[450px] left-[80px]"}>
+        <div className={"fixed top-[400px] left-[80px]"}>
           <div
             className={
               "bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs mb-7"

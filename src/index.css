@@ -10,7 +10,7 @@ body {
 
 input[type="range"] {
   overflow: hidden;
-  width: 180px;
+  width: 130px;
   -webkit-appearance: none;
   background-color: #3b3b3b;
   border-radius: 2px;
