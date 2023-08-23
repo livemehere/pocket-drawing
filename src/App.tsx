@@ -1,9 +1,9 @@
-import { Canvas } from "./components/Canvas.tsx";
+import { PocketDrawing } from "./components/PocketDrawing.tsx";
 
 function App() {
   return (
     <>
-      <Canvas />
+      <PocketDrawing />
     </>
   );
 }

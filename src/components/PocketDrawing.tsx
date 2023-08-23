@@ -3,34 +3,40 @@ import { Mode, PaintingApp } from "../module/PaintingApp.ts";
 import { Palette } from "./Palette.tsx";
 import { BrushControls } from "./BrushControls.tsx";
 import { SaveIcon } from "../graphic/SaveIcon.tsx";
+import { ShortCutHelp } from "./ShortCutHelp.tsx";
 
-const modeList: { mode: Mode; iconPath: string }[] = [
+const modeList: { mode: Mode; iconPath: string; help: string }[] = [
   {
     mode: "brush",
     iconPath: "/icons/pen.png",
+    help: "Q",
   },
   {
     mode: "rect",
     iconPath: "/icons/rectangle.png",
+    help: "W",
   },
   {
     mode: "circle",
     iconPath: "/icons/circle.png",
+    help: "E",
   },
   {
     mode: "line",
     iconPath: "/icons/line.png",
+    help: "R",
   },
   {
     mode: "eraser",
     iconPath: "/icons/eraser.png",
+    help: "T",
   },
 ];
 
 const MIN_BRUSH_SIZE = 5;
 const MAX_BRUSH_SIZE = 200;
 
-export const Canvas = () => {
+export const PocketDrawing = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const paintAppRef = useRef<PaintingApp>();
   const [mode, setMode] = useState<Mode>("brush");
@@ -38,6 +44,8 @@ export const Canvas = () => {
   const [brushSize, setBrushSize] = useState(MIN_BRUSH_SIZE);
   const [blurSize, setBlurSize] = useState(0);
   const [color, setColor] = useState("#fff");
+
+  const [showHelp, setShowHelp] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -76,6 +84,7 @@ export const Canvas = () => {
       if (key === "e") setMode("circle");
       if (key === "r") setMode("line");
       if (key === "t") setMode("eraser");
+      if (key === "f1") setShowHelp((prev) => !prev);
     }
     window.addEventListener("keydown", handler);
 
@@ -114,27 +123,47 @@ export const Canvas = () => {
 
   return (
     <div>
+      <h1
+        className={
+          "text-2xl text-white font-bold fixed top-[10px] right-[100px]"
+        }
+      >
+        Pocket Drawing
+      </h1>
+      <div
+        className={
+          "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs top-4 right-4"
+        }
+      >
+        F1 Help
+      </div>
       <div
         className={
           "fixed top-5 left-[20px] bg-white px-2 py-3 rounded-xl flex flex-col gap-2 shadow-xl shadow-black/50"
         }
       >
-        {modeList.map(({ mode: m, iconPath }) => (
-          <button
+        {modeList.map(({ mode: m, iconPath, help }) => (
+          <ShortCutHelp
+            content={help}
+            direction={"right"}
             key={m}
-            style={{
-              backgroundColor: m === mode ? "#FFD700" : "transparent",
-            }}
-            className={`bg-black/5 p-1 rounded hover:bg-black/10 ${
-              m === mode ? "animate-bounce" : ""
-            }`}
-            onClick={() => {
-              setMode(m);
-              onChangeMode(m);
-            }}
+            show={showHelp}
           >
-            <img src={iconPath} alt={mode} className={"w-4"} />
-          </button>
+            <button
+              style={{
+                backgroundColor: m === mode ? "#FFD700" : "transparent",
+              }}
+              className={`bg-black/5 p-1 rounded hover:bg-black/10 ${
+                m === mode ? "animate-bounce" : ""
+              }`}
+              onClick={() => {
+                setMode(m);
+                onChangeMode(m);
+              }}
+            >
+              <img src={iconPath} alt={mode} className={"w-4"} />
+            </button>
+          </ShortCutHelp>
         ))}
         <button onClick={() => paintAppRef.current?.save()}>
           <SaveIcon />
@@ -149,9 +178,10 @@ export const Canvas = () => {
         onChangeSize={onChangeSize}
         scrollRevert={scrollRevert}
         setScrollRevert={setScrollRevert}
+        showHelp={showHelp}
       />
       <canvas ref={canvasRef}></canvas>
-      <Palette onChange={onChangeColor} color={color} />
+      <Palette onChange={onChangeColor} color={color} showHelp={showHelp} />
     </div>
   );
 };

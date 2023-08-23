@@ -1,8 +1,10 @@
 import { FC, useEffect } from "react";
+import { ShortCutHelp } from "./ShortCutHelp.tsx";
 
 interface Props {
   onChange: (color: string) => void;
   color: string;
+  showHelp?: boolean;
 }
 
 const COLORS = [
@@ -17,7 +19,7 @@ const COLORS = [
   "#000",
 ];
 
-export const Palette: FC<Props> = ({ color, onChange }) => {
+export const Palette: FC<Props> = ({ color, onChange, showHelp }) => {
   useEffect(() => {
     function handler(e: KeyboardEvent) {
       if (e.key.match(/[1-9]/)) {
@@ -35,16 +37,17 @@ export const Palette: FC<Props> = ({ color, onChange }) => {
       <div
         className={"inline-flex gap-2 bg-black/20 py-2 px-3 rounded shadow-xl"}
       >
-        {COLORS.map((c) => (
-          <button
-            key={c}
-            className={`w-6 h-6 cursor-pointer rounded hover:-translate-y-1 hover:scale-110 transition`}
-            style={{
-              backgroundColor: c,
-              outline: c === color ? "2px solid #FFD700" : "none",
-            }}
-            onClick={() => onChange(c)}
-          />
+        {COLORS.map((c, i) => (
+          <ShortCutHelp key={c} content={`${i + 1}`} show={showHelp}>
+            <button
+              className={`w-6 h-6 cursor-pointer rounded hover:-translate-y-1 hover:scale-110 transition`}
+              style={{
+                backgroundColor: c,
+                outline: c === color ? "2px solid #FFD700" : "none",
+              }}
+              onClick={() => onChange(c)}
+            />
+          </ShortCutHelp>
         ))}
       </div>
     </div>
