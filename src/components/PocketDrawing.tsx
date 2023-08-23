@@ -4,31 +4,36 @@ import { Palette } from "./Palette.tsx";
 import { BrushControls } from "./BrushControls.tsx";
 import { SaveIcon } from "../graphic/SaveIcon.tsx";
 import { ShortCutHelp } from "./ShortCutHelp.tsx";
+import PenIcon from "../assets/icons/pen.png";
+import RectangleIcon from "../assets/icons/rectangle.png";
+import CircleIcon from "../assets/icons/circle.png";
+import LineIcon from "../assets/icons/line.png";
+import EraserIcon from "../assets/icons/eraser.png";
 
 const modeList: { mode: Mode; iconPath: string; help: string }[] = [
   {
     mode: "brush",
-    iconPath: "/icons/pen.png",
+    iconPath: PenIcon,
     help: "Q",
   },
   {
     mode: "rect",
-    iconPath: "/icons/rectangle.png",
+    iconPath: RectangleIcon,
     help: "W",
   },
   {
     mode: "circle",
-    iconPath: "/icons/circle.png",
+    iconPath: CircleIcon,
     help: "E",
   },
   {
     mode: "line",
-    iconPath: "/icons/line.png",
+    iconPath: LineIcon,
     help: "R",
   },
   {
     mode: "eraser",
-    iconPath: "/icons/eraser.png",
+    iconPath: EraserIcon,
     help: "T",
   },
 ];
@@ -131,6 +136,7 @@ export const PocketDrawing = () => {
         Pocket Drawing
       </h1>
       <div
+        onClick={() => setShowHelp((prev) => !prev)}
         className={
           "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs top-4 right-4"
         }

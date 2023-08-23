@@ -70,6 +70,10 @@ export class PaintingApp {
     this.canvas.addEventListener("mousedown", this.mouseDown.bind(this));
     this.canvas.addEventListener("mousemove", this.mouseMove.bind(this));
     this.canvas.addEventListener("mouseup", this.mouseUp.bind(this));
+    //   touch event
+    this.canvas.addEventListener("touchstart", this.mouseDown.bind(this));
+    this.canvas.addEventListener("touchmove", this.mouseMove.bind(this));
+    this.canvas.addEventListener("touchend", this.mouseUp.bind(this));
   }
 
   save() {
@@ -105,27 +109,37 @@ export class PaintingApp {
     }
   }
 
-  mouseDown(e: MouseEvent) {
+  mouseDown(e: MouseEvent | TouchEvent) {
     this.mouse.pressed = true;
     this._setLastMousePos(e);
   }
-  mouseMove(e: MouseEvent) {
+  mouseMove(e: MouseEvent | TouchEvent) {
     this._setMousePos(e);
   }
   mouseUp() {
     this.mouse.pressed = false;
   }
 
-  _setLastMousePos(e: MouseEvent) {
+  _setLastMousePos(e: MouseEvent | TouchEvent) {
     const rect = this.canvas.getBoundingClientRect();
-    this.mouse.lastX = e.clientX - rect.left;
-    this.mouse.lastY = e.clientY - rect.top;
+    if (e instanceof TouchEvent) {
+      this.mouse.lastX = e.touches[0].clientX - rect.left;
+      this.mouse.lastY = e.touches[0].clientY - rect.top;
+    } else {
+      this.mouse.lastX = e.clientX - rect.left;
+      this.mouse.lastY = e.clientY - rect.top;
+    }
   }
 
-  _setMousePos(e: MouseEvent) {
+  _setMousePos(e: MouseEvent | TouchEvent) {
     const rect = this.canvas.getBoundingClientRect();
-    this.mouse.x = e.clientX - rect.left;
-    this.mouse.y = e.clientY - rect.top;
+    if (e instanceof TouchEvent) {
+      this.mouse.x = e.touches[0].clientX - rect.left;
+      this.mouse.y = e.touches[0].clientY - rect.top;
+    } else {
+      this.mouse.x = e.clientX - rect.left;
+      this.mouse.y = e.clientY - rect.top;
+    }
   }
 
   animate() {
