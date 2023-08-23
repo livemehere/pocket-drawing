@@ -1,12 +1,12 @@
-import { ChangeEventHandler, FC, useEffect, useState } from "react";
+import { ChangeEventHandler, FC } from "react";
 
 interface Props {
   min: number;
   max: number;
-  initialValue?: number;
   onChange: (size: number) => void;
   direction?: "horizontal" | "vertical";
   step?: number;
+  value: number;
 }
 
 export const InputRange: FC<Props> = ({
@@ -14,18 +14,12 @@ export const InputRange: FC<Props> = ({
   max = 10,
   onChange,
   step,
-  initialValue,
+  value,
 }) => {
-  const [value, setValue] = useState(initialValue ?? min);
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = Number(e.target.value);
-    setValue(value);
     onChange(value);
   };
-
-  useEffect(() => {
-    onChange(initialValue ?? min);
-  }, [onChange, initialValue, min]);
 
   return (
     <div
