@@ -138,7 +138,7 @@ export const PocketDrawing = () => {
       <div
         onClick={() => setShowHelp((prev) => !prev)}
         className={
-          "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs top-4 right-4"
+          "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs top-4 right-4 cursor-pointer"
         }
       >
         F1 Help
