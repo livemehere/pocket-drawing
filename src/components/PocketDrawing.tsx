@@ -51,7 +51,7 @@ export const PocketDrawing = () => {
   const [blurSize, setBlurSize] = useState(0);
   const [color, setColor] = useState("#fff");
 
-  const [showHelp, setShowHelp] = useState(true);
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
