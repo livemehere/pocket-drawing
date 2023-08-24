@@ -215,7 +215,7 @@ export const PocketDrawing = () => {
         </button>
         <button
           onClick={handleUndo}
-          className={"w-[22px] hover:opacity-50"}
+          className={"w-[22px] hover:bg-amber-50"}
           disabled={!hasHistory}
           style={{
             opacity: hasHistory ? 1 : 0.3,
