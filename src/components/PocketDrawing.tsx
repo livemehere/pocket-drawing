@@ -45,7 +45,7 @@ const modeList: { mode: Mode; iconPath: string; help: string }[] = [
   },
 ];
 
-const MIN_BRUSH_SIZE = 5;
+const MIN_BRUSH_SIZE = 1;
 const MAX_BRUSH_SIZE = 200;
 
 export const PocketDrawing = () => {

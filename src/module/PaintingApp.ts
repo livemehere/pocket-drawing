@@ -71,7 +71,7 @@ export class PaintingApp {
     this.resize();
     this.animate();
 
-    window.addEventListener("resize", this.resize.bind(this));
+    // window.addEventListener("resize", this.resize.bind(this));
     this.canvas.addEventListener("mousedown", this.mouseDown.bind(this));
     this.canvas.addEventListener("mousemove", this.mouseMove.bind(this));
     this.canvas.addEventListener("mouseup", this.mouseUp.bind(this));
@@ -118,6 +118,7 @@ export class PaintingApp {
     this.ctx.scale(this.dpr, this.dpr);
     this.canvas.style.width = this.width + "px";
     this.canvas.style.height = this.height + "px";
+    this.canvas.style.background = "rgb(36, 36, 36)";
   }
 
   hasHistorySnapshot() {

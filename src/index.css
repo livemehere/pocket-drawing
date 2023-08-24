@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 body {
-  background-color: rgb(36, 36, 36);
+  background-color: rgb(21, 21, 21);
 }
+
 
 * {
   touch-action: none;
