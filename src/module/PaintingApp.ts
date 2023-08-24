@@ -3,6 +3,7 @@ interface Props {
 }
 
 export type Mode = "brush" | "eraser" | "circle" | "rect" | "line";
+export type HistoryChangeDetail = ImageData[];
 
 export class PaintingApp {
   canvas: HTMLCanvasElement;
@@ -41,7 +42,9 @@ export class PaintingApp {
     y2: number;
   } | null;
 
+  pencilOnly: boolean;
   snapshots: ImageData[];
+  historySnapshots: ImageData[];
 
   constructor({ canvas }: Props) {
     this.canvas = canvas;
@@ -62,6 +65,8 @@ export class PaintingApp {
     this.rectTemp = null;
     this.lineTemp = null;
     this.snapshots = [];
+    this.historySnapshots = [];
+    this.pencilOnly = false;
 
     this.resize();
     this.animate();
@@ -85,6 +90,7 @@ export class PaintingApp {
 
   refresh() {
     this.ctx.clearRect(0, 0, this.width, this.height);
+    this._pushHistorySnapshot();
   }
 
   resize() {
@@ -96,6 +102,50 @@ export class PaintingApp {
     this.ctx.scale(this.dpr, this.dpr);
     this.canvas.style.width = this.width + "px";
     this.canvas.style.height = this.height + "px";
+  }
+
+  hasHistorySnapshot() {
+    return this.historySnapshots.length > 1;
+  }
+
+  undo() {
+    this._popHistorySnapshot();
+  }
+
+  addHistoryEventListener(cb: (e: CustomEvent<HistoryChangeDetail>) => void) {
+    this.canvas.addEventListener("historychange", cb as EventListener);
+  }
+
+  removeHistoryEventListener(
+    cb: (e: CustomEvent<HistoryChangeDetail>) => void,
+  ) {
+    this.canvas.removeEventListener("historychange", cb as EventListener);
+  }
+
+  _emitHistoryChangeEvent() {
+    this.canvas.dispatchEvent(
+      new CustomEvent<HistoryChangeDetail>("historychange", {
+        detail: this.historySnapshots,
+      }),
+    );
+  }
+
+  _pushHistorySnapshot() {
+    this.historySnapshots.push(
+      this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height),
+    );
+    this._emitHistoryChangeEvent();
+  }
+
+  _popHistorySnapshot(remove: boolean = true) {
+    const snapshot = this.historySnapshots[this.historySnapshots.length - 2];
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    if (!snapshot) return;
+    this.ctx.putImageData(snapshot, 0, 0);
+    if (remove) {
+      this.historySnapshots.pop();
+    }
+    this._emitHistoryChangeEvent();
   }
 
   pushSnapshot() {
@@ -123,11 +173,13 @@ export class PaintingApp {
   }
   mouseUp() {
     this.mouse.pressed = false;
+    this._pushHistorySnapshot();
   }
 
   _setLastMousePos(e: MouseEvent | TouchEvent) {
     const rect = this.canvas.getBoundingClientRect();
     if (e instanceof TouchEvent) {
+      if (this.pencilOnly && e.touches[0].touchType !== "stylus") return;
       this.mouse.lastX = e.touches[0].clientX - rect.left;
       this.mouse.lastY = e.touches[0].clientY - rect.top;
     } else {
@@ -139,6 +191,7 @@ export class PaintingApp {
   _setMousePos(e: MouseEvent | TouchEvent) {
     const rect = this.canvas.getBoundingClientRect();
     if (e instanceof TouchEvent) {
+      if (this.pencilOnly && e.touches[0].touchType !== "stylus") return;
       this.mouse.x = e.touches[0].clientX - rect.left;
       this.mouse.y = e.touches[0].clientY - rect.top;
     } else {

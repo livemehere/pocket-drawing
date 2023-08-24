@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Mode, PaintingApp } from "../module/PaintingApp.ts";
+import {
+  HistoryChangeDetail,
+  Mode,
+  PaintingApp,
+} from "../module/PaintingApp.ts";
 import { Palette } from "./Palette.tsx";
 import { BrushControls } from "./BrushControls.tsx";
 import { SaveIcon } from "../graphic/SaveIcon.tsx";
@@ -10,6 +14,8 @@ import CircleIcon from "../assets/icons/circle.png";
 import LineIcon from "../assets/icons/line.png";
 import EraserIcon from "../assets/icons/eraser.png";
 import RefreshIcon from "../assets/icons/refresh.png";
+import PencilIcon from "../assets/icons/pencil.png";
+import UndoIcon from "../assets/icons/undo.png";
 
 const modeList: { mode: Mode; iconPath: string; help: string }[] = [
   {
@@ -46,12 +52,14 @@ export const PocketDrawing = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const paintAppRef = useRef<PaintingApp>();
   const [mode, setMode] = useState<Mode>("brush");
-  const [scrollRevert, setScrollRevert] = useState(false);
+  const [scrollRevert, setScrollRevert] = useState(true);
   const [brushSize, setBrushSize] = useState(MIN_BRUSH_SIZE);
   const [blurSize, setBlurSize] = useState(0);
   const [color, setColor] = useState("#fff");
 
   const [showHelp, setShowHelp] = useState(false);
+  const [pencilOnly, setPencilOnly] = useState(false);
+  const [hasHistory, setHasHistory] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -91,6 +99,9 @@ export const PocketDrawing = () => {
       if (key === "r") setMode("line");
       if (key === "t") setMode("eraser");
       if (key === "f1") setShowHelp((prev) => !prev);
+      if (key === "z" && e.metaKey) {
+        handleUndo();
+      }
     }
     window.addEventListener("keydown", handler);
 
@@ -105,7 +116,20 @@ export const PocketDrawing = () => {
     paintAppRef.current.blur = blurSize;
     paintAppRef.current.mode = mode;
     paintAppRef.current.color = color;
-  }, [brushSize, blurSize, mode, color]);
+    paintAppRef.current.pencilOnly = pencilOnly;
+  }, [brushSize, blurSize, mode, color, pencilOnly]);
+
+  useEffect(() => {
+    const paintApp = paintAppRef.current;
+    if (!paintApp) return;
+    function handler(e: CustomEvent<HistoryChangeDetail>) {
+      setHasHistory(e.detail.length > 0);
+    }
+    paintAppRef.current?.addHistoryEventListener(handler);
+    return () => {
+      paintAppRef.current?.removeHistoryEventListener(handler);
+    };
+  }, []);
 
   const onChangeColor = (color: string) => {
     if (!paintAppRef.current) return;
@@ -125,6 +149,11 @@ export const PocketDrawing = () => {
   const onChangeBlur = (blur: number) => {
     if (!paintAppRef.current) return;
     setBlurSize(blur);
+  };
+
+  const handleUndo = () => {
+    if (!paintAppRef.current) return;
+    paintAppRef.current.undo();
   };
 
   return (
@@ -160,7 +189,7 @@ export const PocketDrawing = () => {
               style={{
                 backgroundColor: m === mode ? "#FFD700" : "transparent",
               }}
-              className={`bg-black/5 p-1 rounded hover:bg-black/10 ${
+              className={`hover:opacity-50 bg-black/5 p-1 rounded hover:bg-black/10 ${
                 m === mode ? "animate-bounce" : ""
               }`}
               onClick={() => {
@@ -172,14 +201,27 @@ export const PocketDrawing = () => {
             </button>
           </ShortCutHelp>
         ))}
-        <button onClick={() => paintAppRef.current?.save()}>
+        <button
+          onClick={() => paintAppRef.current?.save()}
+          className={"hover:opacity-50"}
+        >
           <SaveIcon />
         </button>
         <button
           onClick={() => paintAppRef.current?.refresh()}
-          className={"mt-2"}
+          className={"w-[22px] hover:opacity-50"}
         >
           <img src={RefreshIcon} alt="refresh" />
+        </button>
+        <button
+          onClick={handleUndo}
+          className={"w-[22px] hover:opacity-50"}
+          disabled={!hasHistory}
+          style={{
+            opacity: hasHistory ? 1 : 0.3,
+          }}
+        >
+          <img src={UndoIcon} alt="refresh" />
         </button>
       </div>
       <BrushControls
@@ -193,6 +235,27 @@ export const PocketDrawing = () => {
         setScrollRevert={setScrollRevert}
         showHelp={showHelp}
       />
+      <div
+        className={
+          "fixed top-[650px] left-[20px] bg-white px-2 py-3 rounded-xl flex flex-col gap-2 shadow-xl shadow-black/50"
+        }
+      >
+        <ShortCutHelp
+          content={"터치팬만 인식"}
+          direction={"right"}
+          show={showHelp}
+        >
+          <button
+            onClick={() => setPencilOnly((prev) => !prev)}
+            className={"w-[22px] h-[22px] rounded p-1"}
+            style={{
+              backgroundColor: pencilOnly ? "#DFCCFB" : "transparent",
+            }}
+          >
+            <img src={PencilIcon} alt="pencil" />
+          </button>
+        </ShortCutHelp>
+      </div>
       <canvas ref={canvasRef}></canvas>
       <Palette onChange={onChangeColor} color={color} showHelp={showHelp} />
     </div>

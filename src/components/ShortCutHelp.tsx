@@ -20,7 +20,7 @@ export const ShortCutHelp: FC<Props> = ({
       {children}
       <div
         className={
-          "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs"
+          "absolute bg-black/80 text-white px-2 py-1 rounded shadow-xl text-xs whitespace-nowrap"
         }
         style={{
           top: direction === "bottom" ? "100%" : "unset",
