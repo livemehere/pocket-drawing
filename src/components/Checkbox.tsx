@@ -1,4 +1,5 @@
 import { FC } from "react";
+import CheckIcon from "../assets/icons/check.png";
 
 interface Props {
   value: boolean;
@@ -11,7 +12,7 @@ export const Checkbox: FC<Props> = ({ value, onChange, className }) => {
       className={`select-none flex justify-center items-center w-[24px] h-[24px] bg-white/10 rounded cursor-pointer ${className}`}
       onClick={() => onChange(!value)}
     >
-      {value && <img src="/icons/check.png" alt="check" className={"w-4"} />}
+      {value && <img src={CheckIcon} alt="check" className={"w-4"} />}
     </div>
   );
 };
