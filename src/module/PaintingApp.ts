@@ -84,12 +84,28 @@ export class PaintingApp {
   save() {
     const link = document.createElement("a");
     link.download = "image.png";
+    const snapshot = this.ctx.getImageData(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height,
+    );
+    this.ctx.save();
+    this.ctx.globalCompositeOperation = "lighter";
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "rgb(36, 36, 36)";
+    this.ctx.putImageData(snapshot, 0, 0);
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     link.href = this.canvas.toDataURL();
     link.click();
+    this.ctx.restore();
+
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.putImageData(snapshot, 0, 0);
   }
 
   refresh() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this._pushHistorySnapshot();
   }
 
