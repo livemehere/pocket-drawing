@@ -68,10 +68,10 @@ export class PaintingApp {
     this.historySnapshots = [];
     this.pencilOnly = false;
 
-    this.resize();
+    this.setSize();
     this.animate();
 
-    // window.addEventListener("resize", this.resize.bind(this));
+    window.addEventListener("resize", this.setSize.bind(this));
     this.canvas.addEventListener("mousedown", this.mouseDown.bind(this));
     this.canvas.addEventListener("mousemove", this.mouseMove.bind(this));
     this.canvas.addEventListener("mouseup", this.mouseUp.bind(this));
@@ -109,7 +109,8 @@ export class PaintingApp {
     this._pushHistorySnapshot();
   }
 
-  resize() {
+  setSize() {
+    this.pushSnapshot();
     this.width = window.innerWidth;
     this.height = window.innerHeight;
     this.dpr = window.devicePixelRatio > 1 ? 2 : 1;
@@ -119,6 +120,7 @@ export class PaintingApp {
     this.canvas.style.width = this.width + "px";
     this.canvas.style.height = this.height + "px";
     this.canvas.style.background = "rgb(36, 36, 36)";
+    this.popSnapshot();
   }
 
   hasHistorySnapshot() {
