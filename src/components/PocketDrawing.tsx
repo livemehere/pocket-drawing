@@ -201,28 +201,34 @@ export const PocketDrawing = () => {
             </button>
           </ShortCutHelp>
         ))}
-        <button
-          onClick={() => paintAppRef.current?.save()}
-          className={"hover:opacity-50"}
-        >
-          <SaveIcon />
-        </button>
-        <button
-          onClick={() => paintAppRef.current?.refresh()}
-          className={"w-[22px] hover:opacity-50"}
-        >
-          <img src={RefreshIcon} alt="refresh" />
-        </button>
-        <button
-          onClick={handleUndo}
-          className={"w-[22px] hover:bg-amber-50"}
-          disabled={!hasHistory}
-          style={{
-            opacity: hasHistory ? 1 : 0.3,
-          }}
-        >
-          <img src={UndoIcon} alt="refresh" />
-        </button>
+        <ShortCutHelp content={"저장"} direction={"right"} show={showHelp}>
+          <button
+            onClick={() => paintAppRef.current?.save()}
+            className={"hover:opacity-50 w-[24px] h-[24px]"}
+          >
+            <SaveIcon />
+          </button>
+        </ShortCutHelp>
+        <ShortCutHelp content={"초기화"} direction={"right"} show={showHelp}>
+          <button
+            onClick={() => paintAppRef.current?.refresh()}
+            className={"w-[24px] hover:opacity-50 w-[24px] h-[24px]"}
+          >
+            <img src={RefreshIcon} alt="refresh" />
+          </button>
+        </ShortCutHelp>
+        <ShortCutHelp content={"되돌리기"} direction={"right"} show={showHelp}>
+          <button
+            onClick={handleUndo}
+            className={"w-[24px] hover:bg-amber-50 w-[24px] h-[24px]"}
+            disabled={!hasHistory}
+            style={{
+              opacity: hasHistory ? 1 : 0.3,
+            }}
+          >
+            <img src={UndoIcon} alt="refresh" />
+          </button>
+        </ShortCutHelp>
       </div>
       <BrushControls
         minBrushSize={MIN_BRUSH_SIZE}
@@ -247,7 +253,7 @@ export const PocketDrawing = () => {
         >
           <button
             onClick={() => setPencilOnly((prev) => !prev)}
-            className={"w-[22px] h-[22px] rounded p-1"}
+            className={"w-[24px] h-[24px] rounded p-1"}
             style={{
               backgroundColor: pencilOnly ? "#DFCCFB" : "transparent",
             }}

@@ -16,7 +16,7 @@ export const ShortCutHelp: FC<Props> = ({
   if (!show) return <>{children}</>;
 
   return (
-    <div className={"relative"}>
+    <div className={"relative h-[24px]"}>
       {children}
       <div
         className={
