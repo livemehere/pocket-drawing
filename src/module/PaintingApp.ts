@@ -83,6 +83,10 @@ export class PaintingApp {
     link.click();
   }
 
+  refresh() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+  }
+
   resize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;

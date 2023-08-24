@@ -9,6 +9,7 @@ import RectangleIcon from "../assets/icons/rectangle.png";
 import CircleIcon from "../assets/icons/circle.png";
 import LineIcon from "../assets/icons/line.png";
 import EraserIcon from "../assets/icons/eraser.png";
+import RefreshIcon from "../assets/icons/refresh.png";
 
 const modeList: { mode: Mode; iconPath: string; help: string }[] = [
   {
@@ -173,6 +174,12 @@ export const PocketDrawing = () => {
         ))}
         <button onClick={() => paintAppRef.current?.save()}>
           <SaveIcon />
+        </button>
+        <button
+          onClick={() => paintAppRef.current?.refresh()}
+          className={"mt-2"}
+        >
+          <img src={RefreshIcon} alt="refresh" />
         </button>
       </div>
       <BrushControls
