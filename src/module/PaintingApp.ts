@@ -116,6 +116,7 @@ export class PaintingApp {
   mouseDown(e: MouseEvent | TouchEvent) {
     this.mouse.pressed = true;
     this._setLastMousePos(e);
+    this._setMousePos(e);
   }
   mouseMove(e: MouseEvent | TouchEvent) {
     this._setMousePos(e);
