@@ -237,7 +237,7 @@ export const PocketDrawing = () => {
       />
       <div
         className={
-          "fixed top-[650px] left-[20px] bg-white px-2 py-3 rounded-xl flex flex-col gap-2 shadow-xl shadow-black/50"
+          "hidden sm:block sm:fixed top-[650px] left-[20px] bg-white p-2 rounded-xl flex flex-col gap-2 shadow-xl shadow-black/50"
         }
       >
         <ShortCutHelp

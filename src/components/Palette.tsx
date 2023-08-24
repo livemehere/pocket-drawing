@@ -33,7 +33,11 @@ export const Palette: FC<Props> = ({ color, onChange, showHelp }) => {
   }, [onChange]);
 
   return (
-    <div className={"fixed bottom-10 left-0 right-0 flex justify-center"}>
+    <div
+      className={
+        "fixed bottom-10 sm:left-0 sm:right-0 flex justify-center right-3"
+      }
+    >
       <div
         className={"inline-flex gap-2 bg-black/20 py-2 px-3 rounded shadow-xl"}
       >
